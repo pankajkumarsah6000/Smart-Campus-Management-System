@@ -57,4 +57,3 @@ logging:
     com.smartcampus: ${LOG_LEVEL:INFO}
 
 
-    server.port=${PORT:8080}
