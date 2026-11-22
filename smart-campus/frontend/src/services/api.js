@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Vite dev server proxies /api to the Spring Boot backend (see vite.config.js).
-// In production, set VITE_API_BASE_URL to the deployed backend URL.
+// Production builds read VITE_API_BASE_URL from frontend/.env.production.
 const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const api = axios.create({ baseURL });

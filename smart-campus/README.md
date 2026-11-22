@@ -116,25 +116,33 @@ smart-campus/
 
 ```bash
 cd backend
+Copy-Item .env.example .env # PowerShell; edit values for your setup
 .\mvnw.cmd clean test       # run the integration suite
 .\mvnw.cmd spring-boot:run  # start on http://localhost:8080
 ```
 
-Defaults (see `application.yml`) use an in-memory H2 database — nothing to
-install. Swagger UI at `/swagger-ui.html`, H2 console at `/h2-console` (dev).
-To use Postgres/MySQL, set `DB_URL`/`DB_USERNAME`/`DB_PASSWORD` (drivers are on
-the classpath). To enable real AI replies, set `AI_PROVIDER_API_KEY`; the
-data-grounded fallback works without it.
+Spring Boot automatically loads `backend/.env` when started from the backend
+directory. The defaults use an in-memory H2 database — nothing to install.
+Swagger UI is at `/swagger-ui.html`; H2 console is at `/h2-console` (dev).
+To use Postgres/MySQL, set `DB_URL`/`DB_USERNAME`/`DB_PASSWORD` in `.env`
+(drivers are on the classpath). To enable real AI replies, set
+`AI_PROVIDER_API_KEY`; the data-grounded fallback works without it. Replace
+`JWT_SECRET` before deployment and keep `.env` private.
 
 ### Frontend (Node 20+)
 
 ```bash
 cd frontend
+Copy-Item .env.example .env # PowerShell; leave VITE_API_BASE_URL blank for local proxy
 npm install
 npm run dev                 # http://localhost:5173, proxies /api -> :8080
 npm run build               # production build to dist/
 npm run lint                # oxlint (0 errors; pre-existing style warnings only)
 ```
+
+The committed `frontend/.env.production` targets the deployed Render API.
+Set the backend's `CORS_ALLOWED_ORIGINS` environment variable on Render to
+the frontend's exact deployed origin before using it from a hosted frontend.
 
 ## Documentation
 
