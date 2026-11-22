@@ -33,7 +33,12 @@ export default function Login() {
       const primaryRole = profile.roles?.[0];
       navigate(from || ROLE_HOME[primaryRole] || '/login', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError(
+        err.response?.data?.message
+          || (err.request
+            ? 'Cannot connect to the server. Please check your connection and try again.'
+            : 'Unable to sign in. Please try again.')
+      );
     } finally {
       setSubmitting(false);
     }
