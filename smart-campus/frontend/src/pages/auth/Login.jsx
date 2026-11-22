@@ -120,13 +120,6 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="text-xs text-ink-muted mt-6 text-center leading-relaxed">
-            Demo accounts<br />
-            Admin: admin@smartcampus.edu / Admin@123<br />
-            Faculty: faculty1@smartcampus.edu / Faculty@123<br />
-            Student: student1@smartcampus.edu / Student@123<br />
-            Parent: parent@smartcampus.edu / Parent@123
-          </p>
         </div>
       </div>
     </div>
