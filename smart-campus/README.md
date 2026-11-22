@@ -140,8 +140,9 @@ npm run build               # production build to dist/
 npm run lint                # oxlint (0 errors; pre-existing style warnings only)
 ```
 
-The committed `frontend/.env.production` targets the deployed Render API.
-The backend allows that frontend origin by default. If `CORS_ALLOWED_ORIGINS`
+Production builds use the deployed Render API URL configured in
+`frontend/src/services/api.js`; `VITE_API_BASE_URL` can override it. The
+backend allows the frontend origin by default. If `CORS_ALLOWED_ORIGINS`
 is set explicitly in Render, include both
 `http://localhost:5173,https://smart-campus-management-system-7ack.vercel.app`
 there as well.
