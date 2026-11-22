@@ -141,8 +141,10 @@ npm run lint                # oxlint (0 errors; pre-existing style warnings only
 ```
 
 The committed `frontend/.env.production` targets the deployed Render API.
-Set the backend's `CORS_ALLOWED_ORIGINS` environment variable on Render to
-the frontend's exact deployed origin before using it from a hosted frontend.
+The backend allows that frontend origin by default. If `CORS_ALLOWED_ORIGINS`
+is set explicitly in Render, include both
+`http://localhost:5173,https://smart-campus-management-system-7ack.vercel.app`
+there as well.
 
 ## Documentation
 
