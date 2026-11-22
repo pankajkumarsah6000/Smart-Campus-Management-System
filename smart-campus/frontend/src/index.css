@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-navy-950: #0d1526;
+  --color-navy-900: #16233f;
+  --color-navy-800: #1e2f52;
+  --color-navy-700: #2a3f6b;
+  --color-navy-600: #3a5384;
+
+  --color-paper: #f2f4f7;
+  --color-paper-dark: #0b0f19;
+  --color-card: #ffffff;
+  --color-card-dark: #131a2b;
+
+  --color-ink: #161b26;
+  --color-ink-muted: #5b6472;
+
+  --color-gold: #c99a3e;
+  --color-gold-soft: #eadfc4;
+
+  --color-success: #1f8a5f;
+  --color-success-soft: #dff2e9;
+  --color-danger: #c0392b;
+  --color-danger-soft: #fbe4e1;
+  --color-warning: #b9782a;
+  --color-warning-soft: #f7e6cf;
+  --color-info: #2a5b8b;
+  --color-info-soft: #e1ebf4;
+}
+
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+.dark body {
+  background-color: var(--color-paper-dark);
+  color: #e7e9ee;
+}
+
+.ledger-index {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+}
+
+.stat-card {
+  position: relative;
+  background: var(--color-card);
+  border: 1px solid rgba(22, 35, 63, 0.08);
+}
+.dark .stat-card {
+  background: var(--color-card-dark);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent var(--color-gold-soft) transparent transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
