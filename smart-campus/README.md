@@ -146,6 +146,8 @@ backend allows the frontend origin by default. If `CORS_ALLOWED_ORIGINS`
 is set explicitly in Render, include both
 `http://localhost:5173,https://smart-campus-management-system-7ack.vercel.app,https://smart-campus-management-system-pw9z.vercel.app`
 there as well.
+The deployment preview origin is configured separately via `CORS_PREVIEW_ORIGIN`
+and defaults to the preview URL used for this release.
 
 ## Documentation
 

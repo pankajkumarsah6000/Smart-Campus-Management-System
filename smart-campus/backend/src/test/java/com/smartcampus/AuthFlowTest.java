@@ -8,7 +8,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,6 +43,23 @@ class AuthFlowTest extends IntegrationTestBase {
                         .content("{\"email\":\"admin@smartcampus.edu\",\"password\":\"definitely-wrong\"}"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401));
+    }
+
+    @Test
+    void onlyConfiguredVercelPreviewOriginCanPreflightLogin() throws Exception {
+        String allowedOrigin = "https://smart-campus-management-system-pw9z-3jc8buigp-dfghj2com.vercel.app";
+        mockMvc.perform(options("/api/auth/login")
+                        .header("Origin", allowedOrigin)
+                        .header("Access-Control-Request-Method", "POST")
+                        .header("Access-Control-Request-Headers", "content-type"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", allowedOrigin));
+
+        mockMvc.perform(options("/api/auth/login")
+                        .header("Origin", "https://unrelated-preview.vercel.app")
+                        .header("Access-Control-Request-Method", "POST")
+                        .header("Access-Control-Request-Headers", "content-type"))
+                .andExpect(status().isForbidden());
     }
 
     @Test

@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -32,6 +33,9 @@ public class SecurityConfig {
 
     @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
+
+    @org.springframework.beans.factory.annotation.Value("${app.cors.preview-origin:}")
+    private String previewOrigin;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -82,7 +86,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+        List<String> origins = new ArrayList<>();
+        for (String origin : allowedOrigins.split(",")) {
+            if (!origin.isBlank()) {
+                origins.add(origin.trim());
+            }
+        }
+        if (previewOrigin != null && !previewOrigin.isBlank()
+                && !origins.contains(previewOrigin.trim())) {
+            origins.add(previewOrigin.trim());
+        }
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
