@@ -113,8 +113,18 @@
 | Backend (Spring Boot 3.3.4 / Java 21 / H2 in-memory) | `http://localhost:8080` | Running | Main project — `mvnd spring-boot:run` from `C:\Users\panka\OneDrive\Desktop\smart-campus-management-system (1)\smart-campus\backend` |
 | Frontend (React + Vite dev server) | `http://localhost:5173` | Running | Main project — `C:\Users\panka\OneDrive\Desktop\smart-campus-management-system (1)\smart-campus\frontend` |
 
-**Demo credentials** (seeded by `DataSeeder`):
-- Admin: `admin@smartcampus.edu` / `Admin@123`
-- Faculty: `faculty1@smartcampus.edu` / `faculty2@smartcampus.edu` / `Faculty@123`
-- Student: `student1@smartcampus.edu` / `student2@smartcampus.edu` / `student3@smartcampus.edu` / `Student@123`
-- Parent: `parent@smartcampus.edu` / `Parent@123`
+**Demo credentials** (seeded by `DataSeeder` on a fresh database; demo use only):
+
+| Role | User ID (email) | Password |
+|---|---|---|
+| Admin | `admin@smartcampus.edu` | `Admin@123` |
+| Faculty | `faculty1@smartcampus.edu` | `Faculty@123` |
+| Faculty | `faculty2@smartcampus.edu` | `Faculty@123` |
+| Student | `student1@smartcampus.edu` | `Student@123` |
+| Student | `student2@smartcampus.edu` | `Student@123` |
+| Student | `student3@smartcampus.edu` | `Student@123` |
+| Parent | `parent@smartcampus.edu` | `Parent@123` |
+
+These are seeded demo credentials, not production credentials. The seeder does
+not overwrite an account that already exists in the database, so deployed
+instances with existing account data may use different passwords.
