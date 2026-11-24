@@ -3,6 +3,20 @@ import { authService } from '../services/authService';
 
 const AuthContext = createContext(null);
 
+function storeAuth(data) {
+  const profile = {
+    userId: data.userId,
+    email: data.email,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    roles: data.roles,
+  };
+  localStorage.setItem('accessToken', data.accessToken);
+  localStorage.setItem('refreshToken', data.refreshToken);
+  localStorage.setItem('user', JSON.stringify(profile));
+  return profile;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,16 +35,14 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const data = await authService.login(email, password);
-    const profile = {
-      userId: data.userId,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      roles: data.roles,
-    };
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.setItem('user', JSON.stringify(profile));
+    const profile = storeAuth(data);
+    setUser(profile);
+    return profile;
+  }, []);
+
+  const registerStudent = useCallback(async (payload) => {
+    const data = await authService.registerStudent(payload);
+    const profile = storeAuth(data);
     setUser(profile);
     return profile;
   }, []);
@@ -46,7 +58,7 @@ export function AuthProvider({ children }) {
   );
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, hasRole }}>
+    <AuthContext.Provider value={{ user, loading, login, registerStudent, logout, hasRole }}>
       {children}
     </AuthContext.Provider>
   );

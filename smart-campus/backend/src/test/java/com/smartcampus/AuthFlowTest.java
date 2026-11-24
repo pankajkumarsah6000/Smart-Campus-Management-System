@@ -5,8 +5,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +45,61 @@ class AuthFlowTest extends IntegrationTestBase {
                         .content("{\"email\":\"admin@smartcampus.edu\",\"password\":\"definitely-wrong\"}"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401));
+    }
+
+    @Test
+    @Transactional
+    void publicRegistrationCreatesOnlyStudentAndReturnsLoginTokens() throws Exception {
+        String email = "new.student@smartcampus.edu";
+        String password = "StudentSignup@123";
+
+        var registration = mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(java.util.Map.of(
+                                "firstName", "New",
+                                "lastName", "Student",
+                                "email", email,
+                                "password", password,
+                                "roles", java.util.List.of("ADMIN")))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.roles", contains("STUDENT")))
+                .andReturn();
+
+        String token = objectMapper.readTree(registration.getResponse().getContentAsString())
+                .path("data").path("accessToken").asText();
+        assertThat(token).isNotBlank();
+
+        mockMvc.perform(get("/api/students/me").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.email").value(email))
+                .andExpect(jsonPath("$.data.rollNumber").value(org.hamcrest.Matchers.startsWith("STU-")));
+
+        assertThat(login(email, password)).isNotBlank();
+    }
+
+    @Test
+    @Transactional
+    void studentRegistrationRejectsDuplicateEmailAndShortPasswords() throws Exception {
+        String registration = objectMapper.writeValueAsString(java.util.Map.of(
+                "firstName", "New",
+                "lastName", "Student",
+                "email", "duplicate.student@smartcampus.edu",
+                "password", "StudentSignup@123"));
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registration))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registration.replace("duplicate.student@", "DUPLICATE.STUDENT@")))
+                .andExpect(status().isConflict());
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registration.replace("StudentSignup@123", "short")))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

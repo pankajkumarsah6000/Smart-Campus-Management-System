@@ -40,11 +40,19 @@ Status map used by the handler:
 | Method | Path | Roles |
 |---|---|---|
 | POST | `/login` | public |
+| POST | `/register` | public (creates a STUDENT account only) |
 | POST | `/refresh` | any (token) |
 | POST | `/logout` | any |
 
 Login body: `{ "email": "...", "password": "..." }` → `data.accessToken`,
 `data.refreshToken`, `data.role...`.
+
+Student registration body: `{ "firstName": "...", "lastName": "...", "email": "...", "password": "..." }`.
+Passwords must be 8–72 characters (and no more than 72 UTF-8 bytes). Registration
+creates an active STUDENT account without email verification, generates a roll
+number, and returns login tokens. Department/semester details can be completed
+by an administrator. The public endpoint does not accept a role; admin,
+faculty, and parent accounts remain administrator-managed.
 
 ## Admin — `/api/admin`
 

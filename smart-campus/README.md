@@ -15,6 +15,8 @@ dataset.
 ### Roles & permissions
 - **JWT auth** — access + refresh tokens, BCrypt password hashing, role-based
   route protection (`ADMIN` / `FACULTY` / `STUDENT` / `PARENT`).
+- **Student self-signup** — public registration creates an active STUDENT-only
+  account and generated roll number; privileged roles remain admin-managed.
 - **Defense-in-depth** — role checks in `SecurityConfig` *and* per-method
   `@PreAuthorize`.
 - **Fine-grained data isolation** — a parent can only view data for their

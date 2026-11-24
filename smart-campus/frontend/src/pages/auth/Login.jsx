@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { GraduationCap, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -120,6 +120,12 @@ export default function Login() {
             </button>
           </form>
 
+          <p className="text-sm text-ink-muted mt-5">
+            New student?{' '}
+            <Link to="/signup" className="font-medium text-navy-900 hover:underline dark:text-[var(--color-gold)]">
+              Create an account
+            </Link>
+          </p>
         </div>
       </div>
     </div>
