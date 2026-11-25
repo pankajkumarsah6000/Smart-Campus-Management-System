@@ -10,7 +10,6 @@ import com.smartcampus.entity.Student;
 import com.smartcampus.entity.User;
 import com.smartcampus.exception.BadRequestException;
 import com.smartcampus.exception.DuplicateResourceException;
-import com.smartcampus.exception.ResourceNotFoundException;
 import com.smartcampus.repository.RoleRepository;
 import com.smartcampus.repository.StudentRepository;
 import com.smartcampus.exception.UnauthorizedException;
@@ -70,7 +69,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role studentRole = roleRepository.findByName(RoleName.STUDENT)
-                .orElseThrow(() -> new ResourceNotFoundException("STUDENT role is not configured"));
+                .orElseGet(() -> {
+                    Role role = new Role();
+                    role.setName(RoleName.STUDENT);
+                    return roleRepository.save(role);
+                });
 
         User user = new User();
         user.setEmail(email);
